@@ -1,4 +1,5 @@
 # language-aurora package
+[![apm install language-aurora](https://apm-badges.herokuapp.com/apm/language-aurora.svg)](https://atom.io/packages/language-aurora)
 
 A short description of your package.
 
