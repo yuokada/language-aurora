@@ -5,7 +5,7 @@
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/atom/language-aurora"
+    "url": "https://github.com/yuokada/language-aurora"
   },
   "license": "MIT",
   "engines": {
