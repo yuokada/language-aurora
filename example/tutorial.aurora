@@ -6,7 +6,7 @@ pkg_path = '/vagrant/hello_world.py'
 # versioned, and the version number would be changed in the configuration.
 import hashlib
 with open(pkg_path, 'rb') as f:
-  pkg_checksum = hashlib.md5(f.read()).hexdigest()
+    pkg_checksum = hashlib.md5(f.read()).hexdigest()
 
 # copy hello_world.py into the local sandbox
 install = Process(
@@ -21,7 +21,7 @@ hello_world = Process(
 # describe the task
 hello_world_task = SequentialTask(
   processes = [install, hello_world],
-  resources = Resources(cpu = 1, ram = 1*MB, disk=8*MB))
+  resources = Resources(cpu = 1, ram = 1 * MB, disk=8 * MB))
 
 jobs = [
   Service(cluster = 'devcluster',
