@@ -1,3 +1,4 @@
+# see: http://aurora.apache.org/documentation/latest/reference/configuration-tutorial/
 import os
 hello_world_process = Process(name = 'hello_world', cmdline = 'echo hello world')
 

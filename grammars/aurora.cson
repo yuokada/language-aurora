@@ -1,0 +1,18 @@
+'scopeName': 'source.aurora'
+'name': 'Aurora'
+'fileTypes': ['aurora']
+'patterns': [
+  {
+    # keyword
+    'match': '\\b(Task|SequentialTask|Service|Job|Process|Resources|Constraint|Job|UpdateConfig|HealthCheckConfig|Announcer|Container|LifecycleConfig)\\b'
+    # 'name': 'support.type.aurora.model'
+    'name': 'keyword.class.aurora'
+  }
+  {
+    'match': '\\b(include)\\b'
+    'name': 'keyword.control.include.aurora'
+  }
+  {
+    'include': 'source.python'
+  }
+]

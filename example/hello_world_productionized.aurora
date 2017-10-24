@@ -1,0 +1,20 @@
+#  http://aurora.apache.org/documentation/latest/reference/configuration-tutorial/#sequentialtask-running-processes-in-parallel-or-sequentially
+include('hello_world.aurora')
+
+production_resources = Resources(cpu = 1.0, ram = 512 * MB, disk = 2 * GB)
+staging_resources = Resources(cpu = 0.1, ram = 32 * MB, disk = 512 * MB)
+hello_world_template = hello_world(
+    name = "hello_world-{{cluster}}"
+    task = hello_world(resources=production_resources))
+
+jobs = [
+  # production jobs
+  hello_world_template(cluster = 'cluster1', instances = 25),
+  hello_world_template(cluster = 'cluster2', instances = 15),
+
+  # staging jobs
+  hello_world_template(
+    cluster = 'local',
+    instances = 1,
+    task = hello_world(resources=staging_resources)),
+]

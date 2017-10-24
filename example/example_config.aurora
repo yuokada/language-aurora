@@ -1,0 +1,116 @@
+# see: http://aurora.apache.org/documentation/latest/reference/configuration-tutorial/
+# --- templates here ---
+
+
+class Profile(Struct):
+    package_version = Default(String, 'live')
+    java_binary = Default(String, '/usr/lib/jvm/java-1.7.0-openjdk/bin/java')
+    extra_jvm_options = Default(String, '')
+    parent_environment = Default(String, 'prod')
+    parent_serverset = Default(String,
+                               '/foocorp/service/bird/{{parent_environment}}/bird')
+
+
+# --- processes here ---
+main = Process(
+  name = 'application',
+  cmdline = '{{profile.java_binary}} -server -Xmx1792m '
+            '{{profile.extra_jvm_options}} '
+            '-jar application.jar '
+            '-upstreamService {{profile.parent_serverset}}'
+)
+
+# --- tasks ---
+base_task = SequentialTask(
+  name = 'application',
+  processes = [
+    Process(
+      name = 'fetch',
+      cmdline = 'curl - O https://packages.foocorp.com/{{profile.package_version}}/application.jar'),
+  ]
+)
+
+# not always necessary but often useful to have separate task
+# resource classes
+staging_task = base_task(
+  resources = Resources(
+    cpu = 1.0,
+    ram = 2048 * MB,
+    disk = 1 * GB
+  )
+)
+
+production_task = base_task(
+  resources = Resources(
+      cpu = 4.0,
+      ram = 2560 * MB,
+      disk = 10 * GB
+  )
+)
+
+# --- job template ---
+job_template = Job(
+  name = 'application',
+  role = 'myteam',
+  contact = 'myteam-team@foocorp.com',
+  instances = 20,
+  service = True,
+  task = production_task
+)
+
+# -- profile instantiations (if any) ---
+PRODUCTION = Profile()
+STAGING = Profile(
+  extra_jvm_options = '-Xloggc:gc.log',
+  parent_environment = 'staging'
+)
+
+# -- job instantiations --
+jobs = [
+    job_template(cluster = 'cluster1', environment = 'prod')
+    .bind(profile = PRODUCTION),
+
+    job_template(cluster = 'cluster2', environment = 'prod')
+    .bind(profile = PRODUCTION),
+
+    job_template(cluster = 'cluster1',
+                 environment = 'staging',
+                 service = False,
+                 task = staging_task,
+                 instances = 2)
+    .bind(profile = STAGING),
+]
+
+# -----------------------
+
+copy = Process(
+  name = 'copy',
+  cmdline = 'curl -O https://packages.foocorp.com/app.zip'
+)
+unpack = Process(
+  name = 'unpack',
+  cmdline = 'unzip app.zip'
+)
+remove = Process(
+  name = 'remove',
+  cmdline = 'rm -f app.zip'
+)
+run = Process(
+  name = 'app',
+  cmdline = 'java -jar app.jar'
+)
+run_task = Task(
+  processes = [copy, unpack, remove, run],
+  constraints = order(copy, unpack, remove, run)
+)
+
+# -----------------------
+
+stage = Process(
+  name = 'stage',
+  cmdline = 'curl -O https://packages.foocorp.com/app.zip && '
+            'unzip app.zip && rm -f app.zip')
+
+run = Process(name = 'app', cmdline = 'java -jar app.jar')
+
+run_task = SequentialTask(processes = [stage, run])

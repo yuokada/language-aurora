@@ -1,0 +1,18 @@
+def make_mapper(id):
+  return Process(
+    name = "mapper%03d" % id,
+    cmdline = "echo 'scale=50;s(%d\*4\*a(1)/180)' | bc -l >
+               temp.sine_table.%03d" % (id, id))
+
+def make_reducer():
+  return Process(name = "reducer", cmdline = "cat temp.\* | nl \> sine\_table.txt
+                 && rm -f temp.\*")
+
+processes = map(make_mapper, range(180))
+
+task = Task(
+  name = "mapreduce",
+  processes = processes + [make\_reducer()],
+  constraints = [Constraint(order = [mapper.name(), 'reducer']) for mapper
+                 in processes],
+  max_concurrency = 8)
