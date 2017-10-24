@@ -1,0 +1,10 @@
+'fileTypes': [
+  'aurora'
+]
+'name': 'Aurora'
+'scopeName': 'source.aurora'
+'patterns': [
+  {
+      'include': 'source.python'
+  }
+]
