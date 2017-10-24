@@ -1,11 +1,17 @@
 {
   "name": "language-aurora",
   "version": "0.0.13",
-  "description": "Atom language support for Aurora",
-  "keywords": [],
+  "description": "Atom language support for Apache Aurora",
+  "keywords": [
+    "aurora",
+    "apache aurora"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/yuokada/language-aurora"
+  },
+  "bugs": {
+    "url": "https://github.com/yuokada/language-aurora/issues"
   },
   "license": "MIT",
   "engines": {
