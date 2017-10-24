@@ -1,6 +1,6 @@
 {
   "name": "language-aurora",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Atom language support for Apache Aurora",
   "keywords": [
     "aurora",
