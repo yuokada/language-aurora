@@ -4,7 +4,13 @@
 'patterns': [
   {
     # keyword
-    'match': '\\b(Task|SequentialTask|Service|Job|Process|Resources|Constraint|Job|UpdateConfig|HealthCheckConfig|Announcer|Container|LifecycleConfig)\\b'
+    'match': '\\b(Task|SequentialTask|Service|Job|Process)\\b'
+    # 'name': 'support.type.aurora.model'
+    'name': 'support.function.aurora'
+  }
+  {
+    # keyword
+    'match': '\\b(Resources|Constraint|Job|UpdateConfig|HealthCheckConfig|Announcer|Container|LifecycleConfig)\\b'
     # 'name': 'support.type.aurora.model'
     'name': 'keyword.class.aurora'
   }
